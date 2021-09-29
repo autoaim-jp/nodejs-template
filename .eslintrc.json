@@ -1,0 +1,31 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "import"
+  ],
+  "parser": "babel-eslint", // for async/await
+  "extends": "airbnb-base",
+  "rules": {
+    // semi
+    // https://qiita.com/mysticatea/items/9da94240f29ea516ae87
+    "semi": ["error", "never", {"beforeStatementContinuationChars": "never"}],
+    "semi-spacing": ["error", {"after": true, "before": false}],
+    "semi-style": ["error", "first"],
+    "no-extra-semi": "error",
+    "no-unexpected-multiline": "error",
+    "no-unreachable": "error",
+
+    // allow require(pathVariable)
+    "import/no-dynamic-require": 0,
+
+    // empty line end of file
+    // https://runebook.dev/ja/docs/eslint/rules/no-multiple-empty-lines
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }]
+
+  }
+}
+
