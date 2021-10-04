@@ -7,7 +7,17 @@ require('dotenv').config()
 process.env.APP_PATH = path.join(__dirname, '/')
 const { SERVER_PORT } = process.env
 
+const util = require(path.join(process.env.APP_PATH, 'lib/util'))
 const router = require(path.join(process.env.APP_PATH, 'router/index'))
+
+/* logger */
+const appLogger = util.getLogger({ app: 1 })
+const dbLogger = util.getLogger({ db: 1 })
+const accessLogger = util.getLogger({ access: 1 })
+const privateApiLogger = util.getLogger({ privateApi: 1 }, accessLogger)
+const publicApiLogger = util.getLogger({ publicApi: 1 }, accessLogger)
+
+router.init(appLogger, dbLogger, accessLogger, privateApiLogger, publicApiLogger)
 
 const app = express()
 app.disable('x-powered-by')
@@ -23,6 +33,6 @@ const server = https.createServer(userParam, app)
 app.use(router.router)
 
 server.listen(SERVER_PORT, () => {
-  console.log('Listen to:', SERVER_PORT)
+  appLogger.info(`Listen to: ${SERVER_PORT}`)
 })
 

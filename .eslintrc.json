@@ -2,10 +2,12 @@
   "env": {
     "es6": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "plugins": [
-    "import"
+    "import",
+    "jest"
   ],
   "parser": "babel-eslint", // for async/await
   "extends": "airbnb-base",
@@ -20,12 +22,32 @@
     "no-unreachable": "error",
 
     // allow require(pathVariable)
-    "import/no-dynamic-require": 0,
+    "import/no-dynamic-require": "off",
 
     // empty line end of file
     // https://runebook.dev/ja/docs/eslint/rules/no-multiple-empty-lines
-    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }]
+    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
 
+    // ok: () => { return x } , ng: () => return x
+    "arrow-body-style": ["error", "always"],
+
+    // allow for-of loop
+    // https://qiita.com/the_red/items/0c826e97b57da6d67621
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "ForInStatement",
+        "message": "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array."
+      },
+      {
+        "selector": "LabeledStatement",
+        "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+      },
+      {
+        "selector": "WithStatement",
+        "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+      }
+    ]
   }
 }
 

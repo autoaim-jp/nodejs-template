@@ -1,6 +1,6 @@
 const mysql = require('mysql2')
 
-let pool = null
+let pool = {}
 
 const init = (config) => {
   pool = mysql.createPool({
@@ -13,16 +13,20 @@ const init = (config) => {
   })
 }
 
-const executeSqlList = async (sqlList) => {
-  for(const sql of sqlList) {
-    await new Promise((resolve, reject) => {
-      return pool.query(sql, (err, result) => {
-        if(err) {
-          return reject(err)
-        }
-        resolve()
-      })
+const executeSql = (sql) => {
+  return new Promise((resolve, reject) => {
+    return pool.query(sql, (err) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve()
     })
+  })
+}
+
+const executeSqlList = async (sqlList) => {
+  for await (const sql of sqlList) {
+    await executeSql(sql)
   }
 }
 

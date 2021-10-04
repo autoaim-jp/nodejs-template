@@ -14,23 +14,20 @@ module.exports = {
     'drop table if exists userList',
   ],
   createTableSqlList: [
-   `create table userList (
+    `create table userList (
        userId int unsigned not null auto_increment primary key,
        userName varchar(32) not null unique
     );`,
-     
     `create table userCredential (
        userId int unsigned not null unique,
        sha256Pass varchar(32) not null,
        foreign key (userId) references userList(userId)
     );`,
-     
     `create table accessTokenList (
        userId int unsigned not null,
        accessToken varchar(128) not null unique,
        foreign key (userId) references userList(userId)
     );`,
-     
     `create table fileList (
        fileId int unsigned not null auto_increment primary key,
        userId int unsigned not null,
