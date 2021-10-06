@@ -4,6 +4,21 @@ jobs:
   test:
     name: GitHub Actions test
     runs-on: ubuntu-latest
+  services:
+    db:
+      image: mysql:8.0
+      ports:
+        - 3306:3306
+      env:
+        MYSQL_ROOT_PASSWORD: GitHubActionsMysql
+        MYSQL_DATABASE: github_actions_db
+        MYSQL_USER: github_actions_user
+        MYSQL_PASSWORD: GitHubActionsMysql
+      options: >-
+        --health-cmd "mysqladmin ping"
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -22,7 +37,7 @@ jobs:
       - name: Slack Notification
         uses: sonots/slack-notice-action@v3
         with:
-          title: test result ${{ github.event.repository.name }}
+          title: test (${{ github.event.repository.name }})
           status: ${{ env.WORKFLOW_CONCLUSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

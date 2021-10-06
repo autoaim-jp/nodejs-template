@@ -1,5 +1,11 @@
 const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '/../../../../../.env') })
+const dotenv = require('dotenv')
+
+if (process.env.GITHUB_WORKFLOW) {
+  dotenv.config({ path: path.join(__dirname, '/../../../../../.env.github') })
+} else {
+  dotenv.config({ path: path.join(__dirname, '/../../../../../.env') })
+}
 
 process.env.APP_PATH = path.join(__dirname, '/../../../../../')
 

@@ -24,7 +24,7 @@ jobs:
       - name: Slack Notification
         uses: sonots/slack-notice-action@v3
         with:
-          title: eslint result ${{ github.event.repository.name }}
+          title: eslint (${{ github.event.repository.name }})
           status: ${{ env.WORKFLOW_CONCLUSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
