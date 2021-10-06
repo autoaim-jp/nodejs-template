@@ -69,7 +69,12 @@ describe('success private file api', () => {
       json: jest.fn().mockReturnThis(),
     }
 
-    await getFileHandler(dummyLogger, dummyLogger, setting.codeList, db.getFileByFileLabelUserId)(req, res)
+    await getFileHandler(
+      dummyLogger,
+      dummyLogger,
+      setting.codeList,
+      db.getFileByFileLabelUserId,
+    )(req, res)
 
     expect(res.status.mock.calls[0][0]).toBe(200)
     return null
