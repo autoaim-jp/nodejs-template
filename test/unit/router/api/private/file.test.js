@@ -1,7 +1,7 @@
 const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '/../.env') })
+require('dotenv').config({ path: path.join(__dirname, '/../../../../../.env') })
 
-process.env.APP_PATH = path.join(__dirname, '/../')
+process.env.APP_PATH = path.join(__dirname, '/../../../../../')
 
 const testSetting = require(path.join(process.env.APP_PATH, 'test/setting'))
 const testDb = require(path.join(process.env.APP_PATH, 'test/lib/testDatabase'))
@@ -21,6 +21,9 @@ db.init({
   database: process.env.TEST_DB_NAME,
 })
 
+const util = require(path.join(process.env.APP_PATH, 'lib/util'))
+const dummyLogger = util.getLogger({ test: 1 })
+
 const { getFileHandler } = require(path.join(process.env.APP_PATH, 'router/api/private/file'))
 
 beforeAll(async () => {
@@ -28,8 +31,9 @@ beforeAll(async () => {
   await testDb.executeSqlList(testSetting.createTableSqlList)
 }, 20 * 1000)
 
-afterAll(async () => {
+afterAll(() => {
   testDb.close()
+  db.close()
 })
 
 describe('success private file api', () => {
@@ -65,7 +69,7 @@ describe('success private file api', () => {
       json: jest.fn().mockReturnThis(),
     }
 
-    await getFileHandler(setting.codeList, db.getFileByFileLabelUserId)(req, res)
+    await getFileHandler(dummyLogger, dummyLogger, setting.codeList, db.getFileByFileLabelUserId)(req, res)
 
     expect(res.status.mock.calls[0][0]).toBe(200)
     return null
