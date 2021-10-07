@@ -13,18 +13,18 @@ const init = (config) => {
   })
 }
 
-const executeSql = (sql) => {
-  return new Promise((resolve, reject) => {
-    return pool.query(sql, (err) => {
-      if (err) {
-        return reject(err)
-      }
-      return resolve()
-    })
-  })
-}
-
 const executeSqlList = async (sqlList) => {
+  const executeSql = (sql) => {
+    return new Promise((resolve, reject) => {
+      return pool.query(sql, (err) => {
+        if (err) {
+          return reject(err)
+        }
+        return resolve()
+      })
+    })
+  }
+
   for await (const sql of sqlList) {
     await executeSql(sql)
   }

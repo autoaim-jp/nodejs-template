@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: app.js | Source: app.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">Source: app.js</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Namespaces</h3><ul><li><a href="app.html">app</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="app_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="app.html#.initDb">initDb</a></li><li><a href="app.html#.main">main</a></li></ul></div></li><li><a href="db-forWebClient.html">db-forWebClient</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="db-forWebClient_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="db-forWebClient.html#.getFileByFileLabelUserId">getFileByFileLabelUserId</a></li><li><a href="db-forWebClient.html#.getUserInfoByUserId">getUserInfoByUserId</a></li><li><a href="db-forWebClient.html#.init">init</a></li></ul></div></li><li><a href="db-forWebServer.html">db-forWebServer</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="db-forWebServer_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="db-forWebServer.html#.getUserIdByAccessToken">getUserIdByAccessToken</a></li><li><a href="db-forWebServer.html#.init">init</a></li></ul></div></li><li><a href="db-index.html">db-index</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="db-index_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="db-index.html#.close">close</a></li><li><a href="db-index.html#.init">init</a></li></ul></div></li><li><a href="lib.html">lib</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="lib_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="lib.html#.getLogger">getLogger</a></li></ul></div></li><li><a href="private-file.html">private-file</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="private-file_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="private-file.html#.getFileHandler">getFileHandler</a></li></ul></div></li><li><a href="private-index.html">private-index</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="private-index_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="private-index.html#.getAccessPrivateApiHandler">getAccessPrivateApiHandler</a></li></ul></div></li><li><a href="router-api..html">router-api.</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="router-api._sub"></div></li><li><a href="router-index..html">router-index.</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="router-index._sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#checkCredentialIsValid">checkCredentialIsValid</a></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file エントリポイントのファイル
+ * @namespace app
+ */
+const https = require('https')
+const fs = require('fs')
+const express = require('express')
+const path = require('path')
+require('dotenv').config()
+
+process.env.APP_PATH = path.join(__dirname, '/')
+const { SERVER_PORT } = process.env
+
+const util = require(path.join(process.env.APP_PATH, 'lib/util'))
+const db = require(path.join(process.env.APP_PATH, 'lib/database/index'))
+const setting = require(path.join(process.env.APP_PATH, 'setting'))
+const bss = require(path.join(process.env.APP_PATH, 'browserServerSetting'))
+
+const router = require(path.join(process.env.APP_PATH, 'router/index'))
+
+
+/**
+ * DBを初期化する
+ *
+ * @memberof app
+ * @param {Roarr} appLogger
+ * @param {Roarr} dbLogger
+ * @param {object} codeList
+ */
+const initDb = (appLogger, dbLogger, codeList) => {
+  db.init({
+    host: process.env.PRODUCTION_DB_HOST,
+    user: process.env.PRODUCTION_DB_USER,
+    password: process.env.PRODUCTION_DB_PASS,
+    database: process.env.PRODUCTION_DB_NAME,
+  }, dbLogger, codeList)
+  appLogger.trace('init db')
+}
+
+/**
+ * メインの関数  
+ * ロガー、DB、Webサーバーの初期化を行い、Webサーバーを起動する
+ *
+ * @memberof app
+ */
+const main = () => {
+  try {
+    /* init logger */
+    const appLogger = util.getLogger({ app: 1 })
+    const dbLogger = util.getLogger({ db: 1 })
+    const accessLogger = util.getLogger({ access: 1 })
+    const privateApiLogger = util.getLogger({ privateApi: 1 }, accessLogger)
+    const publicApiLogger = util.getLogger({ publicApi: 1 }, accessLogger)
+
+    /* init db */
+    initDb(appLogger, dbLogger, setting.codeList)
+
+    /* init router */
+    router.setLogger(appLogger, accessLogger, privateApiLogger, publicApiLogger)
+    const customRouter = router.initRouter(db, setting, bss)
+
+    /* init server */
+    const app = express()
+    app.disable('x-powered-by')
+    const userParam = {
+      key: fs.readFileSync(process.env.CERT_KEY),
+      cert: fs.readFileSync(process.env.CERT_CRT),
+      passphrase: '',
+    }
+    const server = https.createServer(userParam, app)
+    app.use(customRouter)
+
+    /* start server */
+    server.listen(SERVER_PORT, () => {
+      appLogger.info(`Listen to: ${SERVER_PORT}`)
+    })
+  } catch(e) {
+    appLogger.error(e)
+    db.close()
+  }
+}
+
+
+main()
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">NHN Entertainment. Frontend Development Lab</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>

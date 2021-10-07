@@ -10,12 +10,16 @@
     "eslint-plugin-jest": "^24.5.2",
     "express": "^4.17.1",
     "jest": "^27.2.2",
+    "jsdoc": "^3.6.7",
     "mysql2": "^2.3.0",
-    "roarr": "^7.0.4"
+    "roarr": "^7.0.4",
+    "tui-jsdoc-template": "^1.2.2"
   },
   "scripts": {
     "test": "jest test/",
-    "lint:server": "eslint 'router/**/*.js' '*.js'",
-    "lint:test": "eslint 'test/**/*.js'"
+    "lint:server": "eslint 'router/**/*.js' '*.js' 'lib/*.js'",
+    "lint:test": "eslint 'test/**/*.js'",
+    "gendoc:server": "yarn jsdoc -c doc/jsdoc/config.json",
+    "gendoc:test": "yarn jsdoc -c doc/jsdoc/config.test.json"
   }
 }

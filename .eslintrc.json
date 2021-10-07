@@ -47,7 +47,14 @@
         "selector": "WithStatement",
         "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
       }
-    ]
+
+    ],
+
+    // allow more than 100 length in line for jsdoc
+    "max-len": "off",
+
+    // allow tail space in comment
+    "no-trailing-spaces": ["error", { "ignoreComments": true }]
   }
 }
 

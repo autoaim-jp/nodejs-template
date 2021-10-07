@@ -1,4 +1,7 @@
+const path = require('path')
+
 module.exports = {
+  STATIC_DIR: path.join(process.env.APP_PATH, 'public'),
   codeList: {
     SUCCESS: 200,
     DB_RECORD_NOT_FOUND: 401,
